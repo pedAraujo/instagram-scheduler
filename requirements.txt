@@ -1,0 +1,5 @@
+python-dotenv
+flask
+sqlalchemy
+flask-security-too
+b2sdk
