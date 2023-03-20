@@ -1,6 +1,6 @@
 from database import Base
 from flask_security import UserMixin, RoleMixin
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey, UnicodeText
 
 # ---- these are SQL models (tables)
@@ -20,6 +20,10 @@ class Role(Base, RoleMixin):
     name = Column(String(80), unique=True)
     description = Column(String(255))
     permissions = Column(UnicodeText)
+    users = relationship("User",
+                         secondary='roles_users',
+                         back_populates='roles',
+                         lazy='dynamic')
 
 
 class User(Base, UserMixin):
@@ -38,4 +42,5 @@ class User(Base, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role',
                          secondary='roles_users',
-                         backref=backref('users', lazy='dynamic'))
+                         back_populates='users',
+                         lazy='dynamic')
